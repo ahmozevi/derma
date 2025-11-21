@@ -1,0 +1,8 @@
+{
+  "name": "Derma",
+  "description": "AI-driven preliminary skin condition classification and dermatologist finder.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
