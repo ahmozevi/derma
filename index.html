@@ -14,14 +14,24 @@
               sans: ['Inter', 'sans-serif'],
             },
             animation: {
-              'float': 'float 6s ease-in-out infinite',
-              'float-delayed': 'float 6s ease-in-out 3s infinite',
-              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'float': 'float 8s ease-in-out infinite',
+              'float-delayed': 'float 8s ease-in-out 4s infinite',
+              'pan': 'pan 40s linear infinite',
+              'tilt': 'tilt 10s infinite linear',
             },
             keyframes: {
               float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-20px)' },
+                '0%, 100%': { transform: 'translateY(0) scale(1)' },
+                '50%': { transform: 'translateY(-25px) scale(1.05)' },
+              },
+              pan: {
+                '0%': { backgroundPosition: '0% 0%' },
+                '100%': { backgroundPosition: '100% 100%' },
+              },
+              tilt: {
+                '0%, 50%, 100%': { transform: 'rotate(0deg)' },
+                '25%': { transform: 'rotate(1deg)' },
+                '75%': { transform: 'rotate(-1deg)' },
               }
             }
           },
@@ -42,11 +52,12 @@
         perspective: 1000px;
       }
       .rotate-3d {
-        transform: rotateX(5deg) rotateY(5deg);
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transform-style: preserve-3d;
       }
       .rotate-3d:hover {
-        transform: rotateX(0deg) rotateY(0deg) scale(1.02);
+        transform: rotateX(2deg) rotateY(2deg) translateY(-5px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
       }
     </style>
   <script type="importmap">

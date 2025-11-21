@@ -5,8 +5,12 @@ import { GroundingChunk } from "../types";
 const cleanBase64 = (b64: string) => b64.split(',')[1];
 
 export const analyzeSkinImage = async (base64Image: string): Promise<string> => {
+  // Use process.env.API_KEY as requested.
   const apiKey = process.env.API_KEY;
-  if (!apiKey) throw new Error("API Key not found");
+  
+  if (!apiKey) {
+    throw new Error("API Key not configured. Please add 'API_KEY' to your Vercel Environment Variables.");
+  }
 
   const ai = new GoogleGenAI({ apiKey });
   
@@ -36,7 +40,7 @@ export const analyzeSkinImage = async (base64Image: string): Promise<string> => 
     return response.text || "I could not analyze the image. Please try again with a clearer photo.";
   } catch (error) {
     console.error("Analysis Error:", error);
-    throw new Error("Failed to analyze image.");
+    throw error; // Re-throw to be caught by UI
   }
 };
 
@@ -45,7 +49,7 @@ export const chatWithContext = async (
   newMessage: string
 ): Promise<string> => {
   const apiKey = process.env.API_KEY;
-  if (!apiKey) throw new Error("API Key not found");
+  if (!apiKey) return "Error: API Key not configured.";
 
   const ai = new GoogleGenAI({ apiKey });
   const chat = ai.chats.create({
@@ -68,7 +72,7 @@ export const chatWithContext = async (
 export const findLocalDoctors = async (
   lat: number,
   lng: number,
-  query: string = "dermatologists and skin clinics"
+  query: string = "local clinics, general physicians and dermatologists"
 ): Promise<{ text: string; chunks: GroundingChunk[] }> => {
   const apiKey = process.env.API_KEY;
   if (!apiKey) throw new Error("API Key not found");
@@ -78,7 +82,7 @@ export const findLocalDoctors = async (
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
-      contents: `Find ${query} near me.`,
+      contents: `Find ${query} near me. Return a list of highly rated places.`,
       config: {
         tools: [{ googleMaps: {} }],
         toolConfig: {
@@ -99,6 +103,6 @@ export const findLocalDoctors = async (
     };
   } catch (error) {
     console.error("Doctor Search Error:", error);
-    throw new Error("Failed to find local doctors.");
+    throw new Error("Failed to find local doctors. Please check API Key permissions.");
   }
 };
