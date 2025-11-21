@@ -1,0 +1,8 @@
+{
+  "name": "Derma AI",
+  "description": "AI-driven skin image analysis and preliminary classification tool with local doctor finder.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
